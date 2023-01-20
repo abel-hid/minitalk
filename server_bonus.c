@@ -69,8 +69,8 @@ int main(int ac, char **av)
 
 
    pid = getpid();
-   printf("PID: %d\n", pid);
-
+   ft_putnbr(pid);
+   ft_putchar('\n');
    sig.sa_sigaction = ft_segaction;
 	sig.sa_flags = SA_SIGINFO;
 

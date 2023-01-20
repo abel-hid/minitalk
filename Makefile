@@ -24,7 +24,7 @@ SRC_S	=	server.c \
 			utils.c
 
 
-BONUS_SRC_C = client_bonus.c \
+BONUS_SRC_C = client_bonus.c\
 				utils.c\
 
 BONUS_SRC_S = server_bonus.c \

@@ -10,11 +10,13 @@
 void	ft_putstr(char *s);
 void	char_to_binary(unsigned char c, int pid);
 void	send_message(char *str, int pid);
-void	 sig_handler(int signum);
+void	sig_handler(int signum);
 void 	ft_action(char *c, int *client_pid, int *bit);
 void 	ft_segaction(int signum, siginfo_t *info, void *context);
 int		main(int ac, char **av);
 int		ft_atoi(const char *str);
+void	ft_putnbr(int nb);
+void	ft_putchar(char c);
 
 
 #endif

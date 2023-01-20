@@ -26,6 +26,8 @@ void 	ft_segaction(int signum, siginfo_t *info, void *context);
 void	send_message(char *str, int pid);
 void 	sig_handler(int signum);
 void	send_message(char *str, int pid);
-
 void 	ft_action(char *c, int *client_pid, int *bit);
+void	ft_putnbr(int nb);
+void	ft_putchar(char c);
+
 #endif

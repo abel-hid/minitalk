@@ -53,7 +53,6 @@ void sig_handler(int signum)
 	{
 		exit(EXIT_SUCCESS);
 
-
 	}
 	if(signum == SIGUSR2)
 	 i++;
@@ -63,9 +62,6 @@ void sig_handler(int signum)
 int	main(int ac, char **av)
 {
 	int	server_pid;
-	int	client_pid;
-
-	client_pid = getpid();
 	if (ac == 3)
 	{
 

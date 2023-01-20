@@ -13,7 +13,6 @@
 #include "minitalk.h"
 
 
-
 void ft_action(char *c, int *client_pid, int *bit)
 {
 
@@ -26,7 +25,6 @@ void ft_action(char *c, int *client_pid, int *bit)
       if (kill(*client_pid, SIGUSR1) == -1)
         exit(EXIT_FAILURE);
    }
-
    *bit = 0;
 
 }
@@ -51,7 +49,7 @@ void ft_segaction(int signum, siginfo_t *info, void *context)
 
    }
    c |= (signum == SIGUSR2);
-   bit++;
+   bit++; 
    if(bit == 8)
 
       ft_action(&c,&client_pid,&bit);
@@ -70,7 +68,9 @@ int main(void)
 
 
    pid = getpid();
-   printf("PID: %d\n", pid);
+
+   ft_putnbr(pid);
+   ft_putchar('\n');
 
    sig.sa_sigaction = ft_segaction;
 	sig.sa_flags = SA_SIGINFO;
