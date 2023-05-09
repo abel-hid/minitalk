@@ -13,7 +13,20 @@ void	ft_putstr(char *s)
 	}
 }
 
-int	ft_atoi(const char *str)
+int ft_cheek(char *str)
+{
+	int i = 0;
+	while(str[i])
+	{
+		if(str[i] < 48 || str[i] > 57)
+		return(1);
+		i++;
+	}
+	return(0);
+
+}
+
+int	ft_atoi(char *str)
 {
 	int		i;
 	int		n;
@@ -23,6 +36,11 @@ int	ft_atoi(const char *str)
 	i = 0;
 	n = 1;
 	result = 0;
+	if(ft_cheek(str) == 1)
+	{
+		ft_putstr("Error");
+		exit(1);
+	}
 	while (str[i] == 32 || (str[i] >= 9 && str[i] <= 13))
 		i++;
 	if (str[i] == '-' || str[i] == '+')

@@ -12,39 +12,35 @@
 
 #include "bonus_minitalk.h"
 
-void	char_to_binary(unsigned char c, int pid)
+
+void	send_message(char *str, int pid)
 {
-	int	i;
+	int	j;
+
+	j = 0;
+	while (str[j])
+	{
+		int	i;
+
 
 	i = 0;
 	while (i < 8)
 	{
-		if (c & 128)
-		{
-			if (kill(pid, SIGUSR2) == -1)
-				exit(EXIT_FAILURE);
-		}
-		else
+		if ((str[j] << i) & 128)
 		{
 			if (kill(pid, SIGUSR1) == -1)
 				exit(EXIT_FAILURE);
 		}
-		c <<= 1;
+		else
+		{
+			if (kill(pid, SIGUSR2) == -1)
+				exit(EXIT_FAILURE);
+		}
 		i++;
-		pause();
-		usleep(200);
+		usleep(1000);
 	}
-}
-
-
-void	send_message(char *str, int pid)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-		char_to_binary(str[i++], pid);
-		char_to_binary('\0', pid);
+		j++;
+	}
 }
 void sig_handler(int signum)
 {
@@ -52,10 +48,8 @@ void sig_handler(int signum)
 
 	if(signum == SIGUSR1)
 	{
-		ft_putstr("DONE");
+		ft_putstr("signal was sent successfully");
 		exit(EXIT_SUCCESS);
-
-
 	}
 	if(signum == SIGUSR2)
 	 i++;
@@ -65,9 +59,7 @@ void sig_handler(int signum)
 int	main(int ac, char **av)
 {
 	int	server_pid;
-	int	client_pid;
 
-	client_pid = getpid();
 	if (ac == 3)
 	{
 

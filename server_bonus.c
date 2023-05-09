@@ -11,30 +11,55 @@
 /* ************************************************************************** */
 
 #include "bonus_minitalk.h"
-
-void ft_action(char *c, int *client_pid, int *bit)
+int determine_bit(int signum)
 {
+   int x;
+    if(signum == SIGUSR1)
+      x = 1;
+   else
+      x = 0;
+      return(x);
+}
 
-    ft_putstr(c);
+void handle_unicode(unsigned char c , siginfo_t *info)
+{
+   static t_list unicode;
+   static int client_pid;
 
-   if(*c == '\0')
+
+
+	if (client_pid != info->si_pid)
    {
-      *c = 0;
-
-      if (kill(*client_pid, SIGUSR1) == -1)
-        exit(EXIT_FAILURE);
+      client_pid = info->si_pid;
+      unicode.i = 0;
+      unicode.n_bytes = 0;
+      bzero(unicode.p,4);
    }
 
-   *bit = 0;
+    if(c >= 194 && c <= 223)
+      unicode.n_bytes = 2;
+   else if(c >= 224 && c <= 239)
+      unicode.n_bytes = 3;
+   else if(c >= 240 && c <= 255)
+      unicode.n_bytes = 4;
 
+   unicode.p[unicode.i++] = c;
+   if(unicode.i == unicode.n_bytes)
+   {
+	  write(1, unicode.p,unicode.n_bytes);
+      unicode.i = 0;
+      unicode.n_bytes = 0;
+      bzero(unicode.p,4);
+   }
 }
 
 void ft_segaction(int signum, siginfo_t *info, void *context)
 {
-   static char	c;
-	static int	bit;
+   static unsigned char	c;
+	static int	bit =0;
    static int client_pid;
    static int  current_pid;
+
 
    (void)context;
 
@@ -48,16 +73,18 @@ void ft_segaction(int signum, siginfo_t *info, void *context)
       c = 0;
 
    }
-   c |= (signum == SIGUSR2);
+   c += determine_bit(signum);
    bit++;
    if(bit == 8)
-	ft_action(&c,&client_pid,&bit);
-
-   c <<=1;
-   usleep(100);
-
-   kill(client_pid ,SIGUSR2);
-
+   {
+      if( c >= 0 && c <= 127)
+		      ft_putchar(c);
+      else
+            handle_unicode(c,info);
+      c  = 0;
+      bit = 0;
+   }
+   c = c << 1;
 }
 int main(int ac, char **av)
 {

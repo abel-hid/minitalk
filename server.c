@@ -12,8 +12,7 @@
 
 #include "minitalk.h"
 
-
-void ft_action(char *c, int *client_pid, int *bit)
+void ft_print_char(char *c, int *client_pid, int *bit)
 {
 
     ft_putstr(c);
@@ -48,20 +47,21 @@ void ft_segaction(int signum, siginfo_t *info, void *context)
       c = 0;
 
    }
-   c |= (signum == SIGUSR2);
-   bit++; 
+   if(signum == SIGUSR1)
+      c += 1;
+   else
+      c += 0;
+   bit++;
    if(bit == 8)
-
-      ft_action(&c,&client_pid,&bit);
-
+      ft_print_char(&c,&client_pid,&bit);
    c <<=1;
-   usleep(100);
-
-   kill(client_pid ,SIGUSR2);
 
 }
-int main(void)
+int main(int ac , char **av)
 {
+    (void)av;
+   if(ac == 1)
+   {
    struct sigaction sig;
 
    int pid;
@@ -81,5 +81,6 @@ int main(void)
 		sigaction(SIGUSR2, &sig, 0);
 		pause();
 	}
+   }
 	return (EXIT_FAILURE);
 }
