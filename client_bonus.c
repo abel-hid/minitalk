@@ -12,39 +12,41 @@
 
 #include "bonus_minitalk.h"
 
-
 void	send_message(char *str, int pid)
 {
 	int	j;
+	int	i;
 
 	j = 0;
-	while (j < (int)strlen(str) + 1)
+	while (j < (int)ft_strlen(str) + 1)
 	{
-		int	i;
 		i = 0;
-	while (i < 8)
-	{
-		if ((str[j] << i) & 128)
+		while (i < 8)
 		{
-			if (kill(pid, SIGUSR1) == -1)
-				exit(EXIT_FAILURE);
+			if ((str[j] << i) & 128)
+			{
+				if (kill(pid, SIGUSR1) == -1)
+					exit(EXIT_FAILURE);
+			}
+			else
+			{
+				if (kill(pid, SIGUSR2) == -1)
+					exit(EXIT_FAILURE);
+			}
+			i++;
+			usleep(1000);
 		}
-		else
-		{
-			if (kill(pid, SIGUSR2) == -1)
-				exit(EXIT_FAILURE);
-		}
-		i++;
-		usleep(500);
-	}
 		j++;
 	}
-
 }
-void sig_handler()
+
+void	sig_handler(int signum)
 {
+	if (signum == SIGUSR1)
+	{
 		ft_putstr("signal was sent successfully");
 		exit(1);
+	}
 }
 
 int	main(int ac, char **av)
@@ -55,11 +57,11 @@ int	main(int ac, char **av)
 	{
 		signal(SIGUSR1, sig_handler);
 		server_pid = ft_atoi(av[1]);
-
 		send_message(av[2], server_pid);
 	}
-	while(1)
+	else
+		ft_putstr("Error");
+	while (1)
 		pause();
-
-	return (EXIT_FAILURE);
+	return (0);
 }

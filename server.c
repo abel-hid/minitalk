@@ -12,75 +12,69 @@
 
 #include "minitalk.h"
 
-void ft_print_char(char *c, int *client_pid, int *bit)
+void	ft_print_char(char c)
 {
-
-    ft_putstr(c);
-
-   if(*c == '\0')
-   {
-      *c = 0;
-
-      if (kill(*client_pid, SIGUSR1) == -1)
-        exit(EXIT_FAILURE);
-   }
-   *bit = 0;
-
+	ft_putchar(c);
+	c = 0;
 }
 
-void ft_segaction(int signum, siginfo_t *info, void *context)
+int	determine_bit(int signum)
 {
-   static char	c;
+	int	x;
+
+	if (signum == SIGUSR1)
+		x = 1;
+	else
+		x = 0;
+	return (x);
+}
+
+void	ft_segaction(int signum, siginfo_t *info, void *context)
+{
+	static char	c;
 	static int	bit;
-   static int client_pid;
-   static int  current_pid;
+	static int	client_pid;
+	static int	current_pid;
 
-   (void)context;
-
-   if (!client_pid)
-	   client_pid = info->si_pid;
+	(void)context;
+	if (!client_pid)
+		client_pid = info->si_pid;
 	current_pid = info->si_pid;
 	if (client_pid != current_pid)
-   {
-      client_pid = current_pid;
-      bit = 0;
-      c = 0;
-
-   }
-   if(signum == SIGUSR1)
-      c += 1;
-   else
-      c += 0;
-   bit++;
-   if(bit == 8)
-      ft_print_char(&c,&client_pid,&bit);
-   c <<=1;
-
-}
-int main(int ac , char **av)
-{
-    (void)av;
-   if(ac == 1)
-   {
-   struct sigaction sig;
-
-   int pid;
-
-
-   pid = getpid();
-
-   ft_putnbr(pid);
-   ft_putchar('\n');
-
-   sig.sa_sigaction = ft_segaction;
-	sig.sa_flags = SA_SIGINFO;
-
-   while (1)
 	{
-		sigaction(SIGUSR1, &sig, 0);
-		sigaction(SIGUSR2, &sig, 0);
-		pause();
+		client_pid = current_pid;
+		bit = 0;
+		c = 0;
 	}
-   }
-	return (EXIT_FAILURE);
+	c += determine_bit(signum);
+	bit++;
+	if (bit == 8)
+	{
+		ft_print_char(c);
+		bit = 0;
+	}
+	c <<= 1;
+}
+
+int	main(int ac, char **av)
+{
+	struct sigaction	sig;
+	int					pid;
+
+	(void) av;
+	if (ac == 1)
+	{
+		pid = getpid();
+		ft_putnbr(pid);
+		ft_putchar('\n');
+		sig.sa_sigaction = ft_segaction;
+		sig.sa_flags = SA_SIGINFO;
+		while (1)
+		{
+			sigaction(SIGUSR1, &sig, 0);
+			sigaction(SIGUSR2, &sig, 0);
+			pause();
+		}
+	}
+	return (0);
 }

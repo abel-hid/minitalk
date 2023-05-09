@@ -1,30 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minitalk.h                                         :+:      :+:    :+:   */
+/*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abel-hid <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/01 16:17:06 by abel-hid          #+#    #+#             */
-/*   Updated: 2023/01/01 16:17:09 by abel-hid         ###   ########.fr       */
+/*   Created: 2023/05/09 23:36:37 by abel-hid          #+#    #+#             */
+/*   Updated: 2023/05/09 23:36:40 by abel-hid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINITALK_H
-# define MINITALK_H
+#include "bonus_minitalk.h"
 
-# include <stdio.h>
-# include <stdlib.h>
-# include <signal.h>
-# include <unistd.h>
-# include <unistd.h>
+void	ft_bzero(void *s, size_t n)
+{
+	size_t	i;
 
-void	ft_putstr(char *s);
-int		ft_atoi(char *str);
-void	ft_segaction(int signum, siginfo_t *info, void *context);
-void	send_message(char *str, int pid);
-void	ft_print_char(char c);
-void	ft_putnbr(int nb);
-void	ft_putchar(char c);
+	i = 0;
+	while (i < n)
+	{
+		((char *)s)[i] = 0;
+		i++;
+	}
+}
 
-#endif
+size_t	ft_strlen(const char *s)
+{
+	size_t	i;
+
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
+}

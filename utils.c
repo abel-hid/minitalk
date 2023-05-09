@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abel-hid <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/09 23:36:25 by abel-hid          #+#    #+#             */
+/*   Updated: 2023/05/09 23:36:29 by abel-hid         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minitalk.h"
 
 void	ft_putstr(char *s)
@@ -5,7 +17,6 @@ void	ft_putstr(char *s)
 	int	i;
 
 	i = 0;
-
 	while (s[i])
 	{
 		write(1, &s[i], 1);
@@ -13,17 +24,18 @@ void	ft_putstr(char *s)
 	}
 }
 
-int ft_cheek(char *str)
+int	ft_cheek(char *str)
 {
-	int i = 0;
-	while(str[i])
+	int	i;
+
+	i = 0;
+	while (str[i])
 	{
-		if(str[i] < 48 || str[i] > 57)
-		return(1);
+		if (str[i] < 48 || str[i] > 57)
+			return (1);
 		i++;
 	}
-	return(0);
-
+	return (0);
 }
 
 int	ft_atoi(char *str)
@@ -32,11 +44,10 @@ int	ft_atoi(char *str)
 	int		n;
 	long	result;
 
-
 	i = 0;
 	n = 1;
 	result = 0;
-	if(ft_cheek(str) == 1)
+	if (ft_cheek(str) == 1)
 	{
 		ft_putstr("Error");
 		exit(1);

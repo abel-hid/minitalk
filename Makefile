@@ -14,8 +14,8 @@
 CLIENT	=	client
 SERVER	=	server
 
-C	=	bonus_client
-S	=	bonus_server
+C	=	client_bonus
+S	=	server_bonus
 
 SRC_C	=	client.c\
 			utils.c\
@@ -26,9 +26,11 @@ SRC_S	=	server.c \
 
 BONUS_SRC_C = client_bonus.c\
 				utils.c\
+				utils2.c\
 
 BONUS_SRC_S = server_bonus.c \
 				utils.c\
+				utils2.c\
 
 
 C_OBJECTS = $(SRC_C:.c=.o)
@@ -60,7 +62,7 @@ bonus : $(S) $(C)
 $(C): $(BONUS_C_OBJECTS)
 	$(CC) $(CFLAGS) $(BONUS_C_OBJECTS) -o $(C)
 
-%.o: %.c
+%.o: %.c minitalk.h bonus_minitalk.h
 	$(CC) $(CFLAGS) -c $<
 
 
