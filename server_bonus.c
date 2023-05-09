@@ -77,6 +77,8 @@ void ft_segaction(int signum, siginfo_t *info, void *context)
    bit++;
    if(bit == 8)
    {
+    if(c == '\0')
+         kill(info->si_pid, SIGUSR1);
       if( c >= 0 && c <= 127)
 		      ft_putchar(c);
       else

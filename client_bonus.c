@@ -18,12 +18,10 @@ void	send_message(char *str, int pid)
 	int	j;
 
 	j = 0;
-	while (str[j])
+	while (j < (int)strlen(str) + 1)
 	{
 		int	i;
-
-
-	i = 0;
+		i = 0;
 	while (i < 8)
 	{
 		if ((str[j] << i) & 128)
@@ -37,23 +35,16 @@ void	send_message(char *str, int pid)
 				exit(EXIT_FAILURE);
 		}
 		i++;
-		usleep(1000);
+		usleep(500);
 	}
 		j++;
 	}
+
 }
-void sig_handler(int signum)
+void sig_handler()
 {
-	static int i;
-
-	if(signum == SIGUSR1)
-	{
 		ft_putstr("signal was sent successfully");
-		exit(EXIT_SUCCESS);
-	}
-	if(signum == SIGUSR2)
-	 i++;
-
+		exit(1);
 }
 
 int	main(int ac, char **av)
@@ -62,13 +53,13 @@ int	main(int ac, char **av)
 
 	if (ac == 3)
 	{
-
 		signal(SIGUSR1, sig_handler);
-		signal(SIGUSR2, sig_handler);
 		server_pid = ft_atoi(av[1]);
 
 		send_message(av[2], server_pid);
 	}
+	while(1)
+		pause();
 
 	return (EXIT_FAILURE);
 }
