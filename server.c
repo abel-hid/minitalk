@@ -32,26 +32,22 @@ int	determine_bit(int signum)
 void	ft_segaction(int signum, siginfo_t *info, void *context)
 {
 	static char	c;
-	static int	bit;
+	static int	bits;
 	static int	client_pid;
-	static int	current_pid;
 
 	(void)context;
-	if (!client_pid)
-		client_pid = info->si_pid;
-	current_pid = info->si_pid;
-	if (client_pid != current_pid)
+	if (client_pid != info->si_pid)
 	{
-		client_pid = current_pid;
-		bit = 0;
+		client_pid = info->si_pid;
+		bits = 0;
 		c = 0;
 	}
 	c += determine_bit(signum);
-	bit++;
-	if (bit == 8)
+	bits++;
+	if (bits == 8)
 	{
 		ft_print_char(c);
-		bit = 0;
+		bits = 0;
 	}
 	c <<= 1;
 }
@@ -76,5 +72,7 @@ int	main(int ac, char **av)
 			pause();
 		}
 	}
+	else
+		ft_putstr("Error");
 	return (0);
 }
